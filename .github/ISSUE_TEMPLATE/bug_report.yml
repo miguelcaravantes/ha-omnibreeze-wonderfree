@@ -1,0 +1,63 @@
+name: Bug report
+description: Report a reproducible problem with the integration
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: checkboxes
+    attributes:
+      label: Checklist
+      options:
+        - label: I am using the Wonderfree version of the OmniBreeze fan, not the Tuya / Smart Life version.
+          required: true
+        - label: I searched existing issues before opening this report.
+          required: true
+        - label: I removed passwords, authentication keys, tokens, and other personal data.
+          required: true
+  - type: input
+    id: home_assistant_version
+    attributes:
+      label: Home Assistant version
+      placeholder: 2026.7.2
+    validations:
+      required: true
+  - type: input
+    id: integration_version
+    attributes:
+      label: Integration version
+      placeholder: v1.0.0
+    validations:
+      required: true
+  - type: dropdown
+    id: region
+    attributes:
+      label: Wonderfree account region
+      options:
+        - Europe / Latin America
+        - North America
+        - China
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem description
+      description: Explain what happened and what you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open...
+        2. Select...
+        3. Observe...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Paste only redacted logs. Never include credentials or local authentication keys.
+      render: text

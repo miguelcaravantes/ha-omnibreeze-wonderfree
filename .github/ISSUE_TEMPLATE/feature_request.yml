@@ -1,0 +1,26 @@
+name: Feature request
+description: Suggest an improvement for the integration
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: checkboxes
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues before opening this request.
+          required: true
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use case
+      description: Describe the problem or workflow this feature would improve.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe how you would like the integration to behave.
+    validations:
+      required: true

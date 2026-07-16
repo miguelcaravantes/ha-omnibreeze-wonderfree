@@ -1,0 +1,12 @@
+{
+  "domain": "omnibreeze_wonderfree",
+  "name": "OmniBreeze Wonderfree",
+  "version": "1.0.0",
+  "config_flow": true,
+  "documentation": "https://github.com/miguelcaravantes/ha-omnibreeze-wonderfree",
+  "issue_tracker": "https://github.com/miguelcaravantes/ha-omnibreeze-wonderfree/issues",
+  "codeowners": ["@miguelcaravantes"],
+  "integration_type": "device",
+  "iot_class": "local_polling",
+  "requirements": []
+}
