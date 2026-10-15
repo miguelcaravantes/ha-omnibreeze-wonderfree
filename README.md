@@ -14,7 +14,7 @@ This integration was developed and tested with:
 - Product: Tower Fan
 - Model: **DC2313R**
 - Mobile app: **Wonderfree**
-- Wonderfree product key: `p11vAZ`
+- Wonderfree product keys: `p11vAZ`, `p11vkW`
 
 > [!IMPORTANT]
 > OmniBreeze also sold an older fan that looks nearly identical but connects through **Tuya / Smart Life**. This integration is only for the newer Wonderfree version. It does not support the Tuya / Smart Life model, and the Tuya integrations will not configure the Wonderfree model.
@@ -31,7 +31,7 @@ The DC2313R does not expose Matter through this integration. Instead, the integr
 - Sound switch
 - LED Display switch
 - Auto-off timer from 1 to 12 hours
-- Automatic local-network discovery
+- Automatic local-network discovery, with optional manual broadcast and device IPv4 addresses for segmented networks or VLANs
 - Automatic recovery when the fan's DHCP address changes
 - Configuration and reauthentication through the Home Assistant UI
 - Wonderfree account regions:
@@ -103,9 +103,10 @@ This repository can be installed as a HACS custom repository:
 
 1. Make sure the fan is powered on and connected to the same network as Home Assistant.
 2. Add the **OmniBreeze Wonderfree** integration.
-3. Select the discovered fan.
-4. Choose the same account region used by the Wonderfree app.
-5. Enter the Wonderfree account email and password.
+3. If automatic broadcast discovery does not immediately find your fan (for example, across subnets, VLANs, or container networks), enter your subnet broadcast address (such as `192.168.1.255`) or the fan's IPv4 address (multiple addresses can be separated by commas).
+4. Select the discovered fan.
+5. Choose the same account region used by the Wonderfree app.
+6. Enter the Wonderfree account email and password.
 
 For accounts created in Mexico or elsewhere in Latin America, start with **Europe / Latin America**.
 
@@ -115,8 +116,9 @@ For accounts created in Mexico or elsewhere in Latin America, start with **Europ
 
 - Confirm this is the Wonderfree version, not the visually identical Tuya / Smart Life version.
 - Confirm the fan is online in the Wonderfree app.
-- Confirm Home Assistant and the fan are on the same network.
-- Check firewall or VLAN rules for UDP discovery and local TCP connections.
+- Confirm Home Assistant and the fan can reach each other over the local network.
+- If automatic `255.255.255.255` broadcast discovery does not reach the fan, enter your subnet's broadcast address or the fan's IPv4 address directly in the discovery form.
+- Check firewall or VLAN rules for UDP discovery (port `6606`) and local TCP connections (port `6607`).
 - Reload the integration setup while the fan is powered on.
 
 ### The email is reported as unregistered

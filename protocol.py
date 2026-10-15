@@ -9,6 +9,7 @@ import hashlib
 import logging
 import socket
 import struct
+import time
 from typing import Any
 
 from cryptography.hazmat.primitives import padding
@@ -188,9 +189,17 @@ def parse_discovery(frame: bytes, source_host: str) -> DiscoveredDevice | None:
     )
 
 
-def discover_devices(broadcast_addresses: list[str] | None = None, device_addresses: list[str] | None = None, timeout: float = 2.0,) -> list[DiscoveredDevice]:
+def discover_devices(
+    broadcast_addresses: Iterable[str] | None = None,
+    device_addresses: Iterable[str] | None = None,
+    timeout: float = 2.0,
+) -> list[DiscoveredDevice]:
     """Discover Wonderfree devices using the proprietary UDP broadcast."""
-    _LOGGER.debug("Received discovery input Broadcast addresses: %s Device addresses: %s", broadcast_addresses, device_addresses)
+    _LOGGER.debug(
+        "Received discovery input Broadcast addresses: %s Device addresses: %s",
+        broadcast_addresses,
+        device_addresses,
+    )
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
@@ -202,7 +211,9 @@ def discover_devices(broadcast_addresses: list[str] | None = None, device_addres
             _LOGGER.debug("Bound discovery port: %s", DISCOVERY_PORT)
         except OSError as err:
             sock.bind(("", 0))
-            _LOGGER.debug("Bind to %s failed (%s), using ephemeral port", DISCOVERY_PORT, err)
+            _LOGGER.debug(
+                "Bind to %s failed (%s), using ephemeral port", DISCOVERY_PORT, err
+            )
         destinations = {
             "255.255.255.255",
             *(broadcast_addresses or []),
@@ -213,9 +224,15 @@ def discover_devices(broadcast_addresses: list[str] | None = None, device_addres
 
         for address in destinations:
             _LOGGER.debug("Sending discovery packet to %s:%s", address, DISCOVERY_PORT)
-            sock.sendto(payload, (address, DISCOVERY_PORT))
-
-        import time
+            try:
+                sock.sendto(payload, (address, DISCOVERY_PORT))
+            except OSError as err:
+                _LOGGER.debug(
+                    "Failed to send discovery packet to %s:%s (%s)",
+                    address,
+                    DISCOVERY_PORT,
+                    err,
+                )
 
         deadline = time.monotonic() + timeout
         while time.monotonic() < deadline:

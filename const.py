@@ -18,8 +18,8 @@ DEFAULT_PORT = 6607
 DISCOVERY_PORT = 6606
 UPDATE_INTERVAL = timedelta(seconds=15)
 SUPPORTED_PRODUCT_KEYS = {
-    "p11vkW",
     "p11vAZ",
+    "p11vkW",
 }
 
 REGION_CHINA = "china"
