@@ -12,6 +12,8 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 
 from .const import (
     CONF_AUTH_KEY,
+    CONF_BROADCAST_ADDRESSES,
+    CONF_DEVICE_ADDRESSES,
     CONF_DEVICE_KEY,
     CONF_PORT,
     DOMAIN,
@@ -83,7 +85,11 @@ class WonderfreeCoordinator(DataUpdateCoordinator[FanStatus]):
 
     async def _async_refresh_network_location(self) -> bool:
         """Rediscover this fan and update its stored address when it changed."""
-        devices = await self.hass.async_add_executor_job(discover_devices)
+        devices = await self.hass.async_add_executor_job(
+            discover_devices,
+            self.entry.data.get(CONF_BROADCAST_ADDRESSES),
+            self.entry.data.get(CONF_DEVICE_ADDRESSES),
+        )
         device = next(
             (
                 candidate

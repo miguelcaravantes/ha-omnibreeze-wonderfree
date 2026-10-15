@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.2.0 — 2026-10-14
+
+- Added support for the `p11vkW` Wonderfree product key variant alongside `p11vAZ`.
+- Added configurable manual broadcast and device IPv4 addresses during discovery and DHCP recovery.
+- Added English translation file (`translations/en.json`) and discovery debug logging.
+
 ## v1.1.0 — 2026-07-27
 
 - Recover automatically from DHCP address changes by rediscovering the fan by its stable device key and updating the config entry.
