@@ -23,7 +23,6 @@ class WonderfreeTemperature(WonderfreeEntity, SensorEntity):
     _attr_name = "Room Temperature"
     _attr_device_class = SensorDeviceClass.TEMPERATURE
     _attr_state_class = SensorStateClass.MEASUREMENT
-    _attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
 
     def __init__(self, coordinator: WonderfreeCoordinator) -> None:
         super().__init__(coordinator)
@@ -32,3 +31,16 @@ class WonderfreeTemperature(WonderfreeEntity, SensorEntity):
     @property
     def native_value(self) -> int:
         return self.coordinator.data.temperature
+    
+    @property
+    def native_unit_of_measurement(self) -> str:
+        """Determine the native temperature unit."""
+        if self.coordinator.data is None:
+            return UnitOfTemperature.CELSIUS
+
+        temperature = self.coordinator.data.temperature
+
+        if temperature > 45:
+            return UnitOfTemperature.FAHRENHEIT
+
+        return UnitOfTemperature.CELSIUS
