@@ -104,13 +104,13 @@ This repository can be installed as a HACS custom repository:
 1. Make sure the fan is powered on and connected to the same network as Home Assistant.
 2. Add the **OmniBreeze Wonderfree** integration.
 3. If automatic broadcast discovery does not immediately find your fan (for example, across subnets, VLANs, or container networks), enter your subnet broadcast address (such as `192.168.1.255`) or the fan's IPv4 address (multiple addresses can be separated by commas).
-4. Select the discovered fan.
+4. Select the discovered fan and the temperature unit it reports. Celsius is preselected; choose Fahrenheit if your fan reports Fahrenheit.
 5. Choose the same account region used by the Wonderfree app.
 6. Enter the Wonderfree account email and password.
 
 For accounts created in Mexico or elsewhere in Latin America, start with **Europe / Latin America**.
 
-The integration assumes the fan reports temperature in Celsius by default. If your fan reports Fahrenheit, open **Settings → Devices & services → OmniBreeze Wonderfree → Configure** and change **Temperature unit reported by the fan**. This sets how the integration reads the fan's values; Home Assistant still controls the displayed unit.
+You can change **Temperature unit reported by the fan** later under **Settings → Devices & services → OmniBreeze Wonderfree → Configure**. This setting changes how the integration reads the fan’s values, not what the fan or Home Assistant displays.
 
 ## Troubleshooting
 

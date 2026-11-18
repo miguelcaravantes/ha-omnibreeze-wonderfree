@@ -18,7 +18,11 @@
       "select_device": {
         "title": "Select fan",
         "data": {
-          "device_key": "Fan"
+          "device_key": "Fan",
+          "native_temperature_unit": "Temperature unit reported by the fan"
+        },
+        "data_description": {
+          "native_temperature_unit": "Choose the unit the fan reports. This does not change the fan’s display or Home Assistant’s display unit."
         }
       },
       "account": {

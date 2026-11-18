@@ -54,6 +54,12 @@ from .models import DiscoveredDevice
 from .protocol import WonderfreeClient, WonderfreeError, discover_devices
 
 _LOGGER = logging.getLogger(__name__)
+_TEMPERATURE_UNITS = vol.In(
+    {
+        UnitOfTemperature.CELSIUS: "Celsius (°C)",
+        UnitOfTemperature.FAHRENHEIT: "Fahrenheit (°F)",
+    }
+)
 
 
 class WonderfreeConfigFlow(ConfigFlow, domain=DOMAIN):
@@ -67,6 +73,7 @@ class WonderfreeConfigFlow(ConfigFlow, domain=DOMAIN):
     def __init__(self) -> None:
         self._devices: dict[str, DiscoveredDevice] = {}
         self._device: DiscoveredDevice | None = None
+        self._native_temperature_unit = UnitOfTemperature.CELSIUS
         self._broadcast_addresses: list[str] = []
         self._device_addresses: list[str] = []
 
@@ -205,6 +212,9 @@ class WonderfreeConfigFlow(ConfigFlow, domain=DOMAIN):
         """Select a discovered fan."""
         if user_input is not None and CONF_DEVICE_KEY in user_input:
             self._device = self._devices[user_input[CONF_DEVICE_KEY]]
+            self._native_temperature_unit = user_input.get(
+                CONF_NATIVE_TEMPERATURE_UNIT, UnitOfTemperature.CELSIUS
+            )
             await self.async_set_unique_id(self._device.device_key)
             self._abort_if_unique_id_configured(
                 updates={
@@ -222,7 +232,14 @@ class WonderfreeConfigFlow(ConfigFlow, domain=DOMAIN):
         }
         return self.async_show_form(
             step_id="select_device",
-            data_schema=vol.Schema({vol.Required(CONF_DEVICE_KEY): vol.In(options)}),
+            data_schema=vol.Schema(
+                {
+                    vol.Required(CONF_DEVICE_KEY): vol.In(options),
+                    vol.Required(
+                        CONF_NATIVE_TEMPERATURE_UNIT, default=UnitOfTemperature.CELSIUS
+                    ): _TEMPERATURE_UNITS,
+                }
+            ),
         )
 
     @staticmethod
@@ -279,6 +296,9 @@ class WonderfreeConfigFlow(ConfigFlow, domain=DOMAIN):
                 return self.async_create_entry(
                     title=self._device.name,
                     data=entry_data,
+                    options={
+                        CONF_NATIVE_TEMPERATURE_UNIT: self._native_temperature_unit
+                    },
                 )
         return self.async_show_form(
             step_id="account",
@@ -361,12 +381,7 @@ class WonderfreeOptionsFlow(OptionsFlowWithReload):
                         default=self.config_entry.options.get(
                             CONF_NATIVE_TEMPERATURE_UNIT, UnitOfTemperature.CELSIUS
                         ),
-                    ): vol.In(
-                        {
-                            UnitOfTemperature.CELSIUS: "Celsius (°C)",
-                            UnitOfTemperature.FAHRENHEIT: "Fahrenheit (°F)",
-                        }
-                    ),
+                    ): _TEMPERATURE_UNITS,
                 }
             ),
         )
