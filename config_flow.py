@@ -7,9 +7,20 @@ import logging
 from typing import Any
 
 import voluptuous as vol
-
-from homeassistant.config_entries import ConfigEntry, ConfigFlow
-from homeassistant.const import CONF_EMAIL, CONF_HOST, CONF_NAME, CONF_PASSWORD
+from homeassistant.config_entries import (
+    ConfigEntry,
+    ConfigFlow,
+    ConfigFlowResult,
+    OptionsFlowWithReload,
+)
+from homeassistant.const import (
+    CONF_EMAIL,
+    CONF_HOST,
+    CONF_NAME,
+    CONF_PASSWORD,
+    UnitOfTemperature,
+)
+from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.selector import (
@@ -27,12 +38,13 @@ from .cloud import (
 )
 from .const import (
     CONF_AUTH_KEY,
+    CONF_BROADCAST_ADDRESSES,
+    CONF_DEVICE_ADDRESSES,
     CONF_DEVICE_KEY,
+    CONF_NATIVE_TEMPERATURE_UNIT,
     CONF_PORT,
     CONF_PRODUCT_KEY,
     CONF_REGION,
-    CONF_BROADCAST_ADDRESSES,
-    CONF_DEVICE_ADDRESSES,
     DEFAULT_REGION,
     DOMAIN,
     REGION_OPTIONS,
@@ -46,6 +58,11 @@ _LOGGER = logging.getLogger(__name__)
 
 class WonderfreeConfigFlow(ConfigFlow, domain=DOMAIN):
     VERSION = 1
+
+    @staticmethod
+    @callback
+    def async_get_options_flow(config_entry: ConfigEntry) -> OptionsFlowWithReload:
+        return WonderfreeOptionsFlow()
 
     def __init__(self) -> None:
         self._devices: dict[str, DiscoveredDevice] = {}
@@ -325,4 +342,31 @@ class WonderfreeConfigFlow(ConfigFlow, domain=DOMAIN):
                 else DEFAULT_REGION
             ),
             errors=errors,
+        )
+
+
+class WonderfreeOptionsFlow(OptionsFlowWithReload):
+    async def async_step_init(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        if user_input is not None:
+            return self.async_create_entry(data=user_input)
+
+        return self.async_show_form(
+            step_id="init",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(
+                        CONF_NATIVE_TEMPERATURE_UNIT,
+                        default=self.config_entry.options.get(
+                            CONF_NATIVE_TEMPERATURE_UNIT, UnitOfTemperature.CELSIUS
+                        ),
+                    ): vol.In(
+                        {
+                            UnitOfTemperature.CELSIUS: "Celsius (°C)",
+                            UnitOfTemperature.FAHRENHEIT: "Fahrenheit (°F)",
+                        }
+                    ),
+                }
+            ),
         )

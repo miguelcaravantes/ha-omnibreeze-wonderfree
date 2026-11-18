@@ -1,12 +1,16 @@
 """Sensor platform for OmniBreeze Wonderfree."""
 
-from homeassistant.components.sensor import SensorDeviceClass, SensorEntity, SensorStateClass
+from homeassistant.components.sensor import (
+    SensorDeviceClass,
+    SensorEntity,
+    SensorStateClass,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN
+from .const import CONF_NATIVE_TEMPERATURE_UNIT, DOMAIN
 from .coordinator import WonderfreeCoordinator
 from .entity import WonderfreeEntity
 
@@ -23,11 +27,13 @@ class WonderfreeTemperature(WonderfreeEntity, SensorEntity):
     _attr_name = "Room Temperature"
     _attr_device_class = SensorDeviceClass.TEMPERATURE
     _attr_state_class = SensorStateClass.MEASUREMENT
-    _attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
 
     def __init__(self, coordinator: WonderfreeCoordinator) -> None:
         super().__init__(coordinator)
         self._attr_unique_id = f"{coordinator.entry.unique_id}_temperature"
+        self._attr_native_unit_of_measurement = coordinator.entry.options.get(
+            CONF_NATIVE_TEMPERATURE_UNIT, UnitOfTemperature.CELSIUS
+        )
 
     @property
     def native_value(self) -> int:

@@ -110,6 +110,8 @@ This repository can be installed as a HACS custom repository:
 
 For accounts created in Mexico or elsewhere in Latin America, start with **Europe / Latin America**.
 
+The integration assumes the fan reports temperature in Celsius by default. If your fan reports Fahrenheit, open **Settings → Devices & services → OmniBreeze Wonderfree → Configure** and change **Temperature unit reported by the fan**. This sets how the integration reads the fan's values; Home Assistant still controls the displayed unit.
+
 ## Troubleshooting
 
 ### No supported fans were found

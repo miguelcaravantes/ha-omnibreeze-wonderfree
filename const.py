@@ -11,6 +11,7 @@ CONF_DEVICE_KEY = "device_key"
 CONF_PRODUCT_KEY = "product_key"
 CONF_PORT = "port"
 CONF_REGION = "region"
+CONF_NATIVE_TEMPERATURE_UNIT = "native_temperature_unit"
 CONF_BROADCAST_ADDRESSES = "broadcast_addresses"
 CONF_DEVICE_ADDRESSES = "device_addresses"
 

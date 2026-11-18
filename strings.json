@@ -55,10 +55,21 @@
       "unknown": "The config entry no longer exists."
     }
   },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "native_temperature_unit": "Temperature unit reported by the fan"
+        },
+        "data_description": {
+          "native_temperature_unit": "Choose the unit the fan reports over the network, not the unit you want Home Assistant to display."
+        }
+      }
+    }
+  },
   "entity": {
     "fan": {
       "fan": {
-        "name": null,
         "state_attributes": {
           "preset_mode": {
             "state": {
