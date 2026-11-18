@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.3.0 — 2026-11-18
+
+- Choose the temperature unit each fan reports during setup, with Celsius preselected. You can change it later under **Configure** without changing the fan’s display.
+- Fixed a translation error that could prevent the integration from loading in Home Assistant.
+
 ## v1.2.0 — 2026-10-14
 
 - Added support for the `p11vkW` Wonderfree product key variant alongside `p11vAZ`.
